@@ -1,0 +1,43 @@
+{
+  "name": "itisnow-browser",
+  "version": "3.0.0",
+  "description": "ItIsNow Browser — built-in Tor + VPN proxy, tabbed browsing, 6 themes",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "build": {
+    "appId": "com.itisnow.browser",
+    "productName": "ItIsNow Browser",
+    "copyright": "Copyright © 2025 ItIsNow",
+    "directories": { "output": "dist" },
+    "files": [
+      "src/**/*",
+      "index.html",
+      "renderer.js",
+      "assets/**/*"
+    ],
+    "extraResources": [
+      { "from": "tor-bin/", "to": "tor-bin/", "filter": ["**/*"] }
+    ],
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ItIsNow Browser",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "deleteAppDataOnUninstall": false
+    }
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  }
+}
