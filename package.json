@@ -1,7 +1,7 @@
 {
   "name": "itisnow-browser",
-  "version": "3.0.0",
-  "description": "ItIsNow Browser — built-in Tor + VPN proxy, tabbed browsing, 6 themes",
+  "version": "2.0.0",
+  "description": "ItIsNow Browser \u2014 built-in Tor + VPN proxy, tabbed browsing",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
@@ -10,30 +10,45 @@
   "build": {
     "appId": "com.itisnow.browser",
     "productName": "ItIsNow Browser",
-    "copyright": "Copyright © 2025 ItIsNow",
-    "directories": { "output": "dist" },
+    "copyright": "Copyright \u00a9 2025 ItIsNow",
+    "asar": true,
+    "directories": {
+      "output": "dist"
+    },
     "files": [
       "src/**/*",
       "index.html",
       "renderer.js",
-      "assets/**/*"
+      "assets/**/*",
+      "data/**/*",
+      "src/**/*"
     ],
     "extraResources": [
-      { "from": "tor-bin/", "to": "tor-bin/", "filter": ["**/*"] }
+      {
+        "from": "tor-bin/",
+        "to": "tor-bin/",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "psiphon-bin/",
+        "to": "psiphon-bin/",
+        "filter": [
+          "**/*"
+        ]
+      }
     ],
     "win": {
-      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "icon": "assets/icon.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "ItIsNow Browser",
-      "installerIcon": "assets/icon.ico",
-      "uninstallerIcon": "assets/icon.ico",
-      "deleteAppDataOnUninstall": false
     }
   },
   "devDependencies": {

@@ -335,12 +335,16 @@ body { display: flex; flex-direction: column; background: var(--bg); color: var(
   color: var(--dim);
 }
 .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dimmer); }
-.pill.on-tor   { color: var(--purple); border-color: var(--purple); }
-.pill.on-tor   .dot { background: var(--purple); }
-.pill.on-vpn   { color: var(--amber); border-color: var(--amber); }
-.pill.on-vpn   .dot { background: var(--amber); }
-.pill.starting { color: var(--amber); border-color: var(--amber); }
-.pill.starting .dot { background: var(--amber); animation: pulse 1s ease infinite; }
+.pill.on-tor      { color: var(--purple); border-color: var(--purple); }
+.pill.on-tor      .dot { background: var(--purple); }
+.pill.on-vpn      { color: var(--amber);  border-color: var(--amber); }
+.pill.on-vpn      .dot { background: var(--amber); }
+.pill.on-psiphon  { color: var(--green);  border-color: var(--green); }
+.pill.on-psiphon  .dot { background: var(--green); }
+.pill.on-tor-all  { color: var(--purple); border-color: var(--purple); }
+.pill.on-tor-all  .dot { background: var(--purple); animation: pulse 1.5s ease infinite; }
+.pill.starting    { color: var(--amber);  border-color: var(--amber); }
+.pill.starting    .dot { background: var(--amber); animation: pulse 1s ease infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
 #torPill .progress { display: none; }
@@ -503,6 +507,22 @@ select.sInput { cursor: pointer; }
   border-radius: 3px;
   margin-bottom: 4px;
 }
+
+/* ── Toggle switch ─────────────────────────────────────────────────────── */
+.toggle { position:relative; display:inline-block; width:38px; height:20px; flex-shrink:0; cursor:pointer; }
+.toggle input { opacity:0; width:0; height:0; }
+.toggle-slider { position:absolute; inset:0; background:var(--line2); border-radius:999px; transition:.2s; }
+.toggle-slider::before { content:''; position:absolute; width:14px; height:14px; left:3px; top:3px; background:var(--dim); border-radius:50%; transition:.2s; }
+.toggle input:checked + .toggle-slider { background:var(--accent); }
+.toggle input:checked + .toggle-slider::before { transform:translateX(18px); background:#fff; }
+
+
+.toggle { position:relative; display:inline-block; width:38px; height:20px; flex-shrink:0; cursor:pointer; }
+.toggle input { opacity:0; width:0; height:0; }
+.toggle-slider { position:absolute; inset:0; background:var(--line2); border-radius:999px; transition:.2s; }
+.toggle-slider::before { content:''; position:absolute; width:14px; height:14px; left:3px; top:3px; background:var(--dim); border-radius:50%; transition:.2s; }
+.toggle input:checked + .toggle-slider { background:var(--accent); }
+.toggle input:checked + .toggle-slider::before { transform:translateX(18px); background:#fff; }
 </style>
 </head>
 <body>
@@ -542,6 +562,7 @@ select.sInput { cursor: pointer; }
     <span id="torLabel">TOR OFF</span>
     <span class="progress" id="torProgress"></span>
   </div>
+  <div class="pill" id="psiphonPill"><span class="dot"></span><span id="psiphonLabel">PSIPHON OFF</span></div>
   <div class="pill" id="vpnPill">
     <span class="dot"></span>
     <span id="vpnLabel">VPN OFF</span>
@@ -611,16 +632,39 @@ select.sInput { cursor: pointer; }
         <div class="dot off" id="sTorDot"></div>
         <div class="info">
           <b id="sTorTitle">Tor not running</b>
-          <small id="sTorSub">The browser will start Tor automatically on launch.</small>
+          <small id="sTorSub">Starts automatically on launch.</small>
           <div class="progressBar" id="sTorPBar" style="display:none"><div class="fill" id="sTorFill"></div></div>
         </div>
         <button class="btn" id="torRestartBtn" style="font-size:11px;padding:5px 10px">Restart</button>
       </div>
-      <p class="sNote">
-        .onion URLs route through Tor automatically. To use Tor, the browser needs either a system Tor
-        install (tor.exe in PATH) or a Tor binary in the <b>tor-bin/</b> folder next to the app.
-        <a href="#" id="torDownloadLink">Download Tor Expert Bundle →</a>
-      </p>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:10px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;">
+        <div>
+          <div style="font-size:12px;font-weight:600">Route all traffic through Tor</div>
+          <div style="font-size:10.5px;color:var(--dim);margin-top:2px">Hides all browsing, not just .onion sites. Slower.</div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="torAllCheck" /><span class="toggle-slider"></span></label>
+      </div>
+      <p class="sNote" style="margin-top:8px">Drop <b>tor.exe</b> + DLLs from the <a href="#" id="torDownloadLink">Tor Expert Bundle</a> into <b>tor-bin/</b>.</p>
+    </div>
+
+    <!-- Psiphon -->
+    <div class="sSection">
+      <h3>Psiphon</h3>
+      <div class="sTorStatus">
+        <div class="dot off" id="sPsiphonDot"></div>
+        <div class="info">
+          <b id="sPsiphonTitle">Psiphon off</b>
+          <small id="sPsiphonSub">Free built-in proxy. No account or config needed.</small>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:10px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;">
+        <div>
+          <div style="font-size:12px;font-weight:600">Enable Psiphon</div>
+          <div style="font-size:10.5px;color:var(--dim);margin-top:2px">Routes clearnet traffic through Psiphon free servers</div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="psiphonCheck" /><span class="toggle-slider"></span></label>
+      </div>
+      <p class="sNote" style="margin-top:8px">Drop <b>psiphon3.exe</b> into <b>psiphon-bin/</b>. Download free from <a href="#" id="psiphonDlLink">psiphon.ca</a>. Connects automatically.</p>
     </div>
 
     <!-- VPN -->
