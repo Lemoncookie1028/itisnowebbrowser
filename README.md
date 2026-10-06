@@ -127,21 +127,11 @@ itisnow Browser is intended to support modern desktop platforms.
 
 Windows
 
-Linux
-
-macOS
 
 Platform availability may vary depending on the current release.
 
 Screenshots
-
-Add screenshots of itisnow Browser here:
-
-screenshots/
-├── homepage.png
-├── browser.png
-├── settings.png
-└── tor-mode.png
+none
 
 Development
 
@@ -181,11 +171,7 @@ itisnow Browser is intended for privacy-focused browsing and legitimate security
 
 Using Tor or a VPN does not guarantee complete anonymity or security. Users are responsible for complying with applicable laws and the terms of the websites and services they access.
 
-License
 
-This project is licensed under the [LICENSE NAME] license.
-
-See the LICENSE file for more information.
 
 About itisnow Browser
 
